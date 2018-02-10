@@ -153,7 +153,7 @@ class Boggle{
 }
 
 
-let newGame = new Boggle(4)
+let newGame = new Boggle(6)
 // console.log(newGame)
 // console.log(newGame.print_board())
 newGame.solve()
