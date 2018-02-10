@@ -2,9 +2,9 @@
 
 var templateBoard=[ [ 'U', 'A', 'B', 'P' ],
 [ 'A', 'N', 'A', 'R' ],
-[ 'B', 'J', 'T', 'F' ],
-[ 'E', 'W', 'P', 'Q' ] ]
-var templateWords=['AUNT','ANT','BEE','BANK','CAR','DICE','END','FINE','GAS','HELP','IDLE','JAM']
+[ 'B', 'T', 'K', 'E' ],
+[ 'E', 'W', 'E', 'Q' ] ]
+var templateWords=['AUNT','ANT','BEE','BREAK','BANK','CAR','DICE','END','FINE','GAS','HELP','IDLE','JAM']
 
 class Boogle {
     constructor(size,words) {
@@ -67,7 +67,11 @@ class Boogle {
         let tempList=list.slice();
         if(list.length<1) {
             if(!this.checkDuplicate(comb)){
-                res.push(comb);
+                let status=true;
+                for(let i=0; i<comb.length-1 && status; i++) {
+                    status=this.checkNext(comb[i],comb[i+1])
+                }
+                if(status)res.push(comb);
             }
         }
         else {
@@ -88,7 +92,6 @@ class Boogle {
     checkNext(before,after) {
         let delta0=Math.abs(before[0]-after[0]);
         let delta1=Math.abs(before[1]-after[1]);
-        console.log(delta0,delta1)
         if(delta0+delta1!==0 && delta0<2 && delta1<2) {return true;}
         else {return false}
     }
@@ -105,7 +108,9 @@ class Boogle {
 }
 
 
-var game = new Boogle()
+var game = new Boogle(10)
+//Masukan paramater angak bila ingin merandom board
+//Kosongkan untuk menggunakan template
 
 game.showBoard()
 for(let i in game.match) {
