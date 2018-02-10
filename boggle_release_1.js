@@ -1,28 +1,12 @@
 
 
 class Boggle {
-  // set constructor
-  // string as the input strin.
-    // currently set as a predfined input
-    // or randomly generated
-  // boardSize as length or 4
-  // boardVol as the total amount of entries
-  // board to set the base board
-  constructor(length , strInput) {
     this.string = strInput
     this.boardSize = length || 4
     this.boardVol = this.boardSize*this.boardSize
     this.board = this.make_board()
   }
 
-  // make board as array in array with boardSize * boardSize
-  // set wordOrder to 0 for counting index of inputted string
-  // loop rows from 0 to boardSize
-    // push an empty array into board
-    // loop collumn from 0 to boardSize
-      // push string of letters generated/ prepared from index wordOrder, uppercased
-      // increment wordOrder
-  // return board
   make_board(){
     let board = [];
     let wordOrder = 0
@@ -36,9 +20,6 @@ class Boggle {
     return board
   }
 
-  // print board on console
-  // loop rows from 0 to boardSize
-  // log board rows joined with ' ' inbetween
   log_board(inputBoard){
     if (inputBoard === undefined) {
       inputBoard = this.board;
@@ -48,20 +29,19 @@ class Boggle {
     }
   }
 
-  // generate a random letter
-  // let alphabet contain a-z
-  // let rngIndex to generate index from 0 25
-  // return alphabet at index 'rngIndex' uppercased
   generate_random_letter(){
     let alphabet = 'abcdefghijklmnopqrstuvwxyz'
-    let rngIndex = this.rng(25)
-    return alphabet[rngIndex].toUpperCase();
+    let alphabetArr = alphabet.split('')
+    let randomized = ''
+
+    for (var i = 0; i < alphabet.length; i++) {
+      let rngIndex = this.rng(alphabetArr.length-1)
+      randomized += alphabetArr[rngIndex].toUpperCase();
+      alphabetArr.splice(rngIndex, 1)
+    }
+    return randomized
   }
 
-  // rng generator using math random.
-  // has parameter of length
-  // if length is undefined set as 1
-  // return math random * length and then rounded
   rng(length){
     if (length === undefined) {
       length = 1
@@ -69,22 +49,21 @@ class Boggle {
     return Math.round(Math.random()*length)
   }
 
-  // to shuffle the board contents
   shake(){
     let boardShaken = [];
+    let randomized = this.generate_random_letter()
     console.log('');
     for (let rows = 0; rows < this.boardSize; rows++){
       boardShaken.push([])
       for (let col = 0; col < this.boardSize; col++) {
-        boardShaken[rows].push(this.generate_random_letter())
+        boardShaken[rows].push(randomized[col])
       }
+      randomized = randomized.substr(this.boardSize)
     }
     return boardShaken
   }
 
-  check_board(){
 
-  }
 
 }
 
