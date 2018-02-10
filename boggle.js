@@ -1,15 +1,13 @@
+const words = require('./data')
+// console.log(words)
 class Boggle{
 	constructor(size){
 		this.size = size
-		this.dictio = ['APPLE','SIT','TRIP','TURN','APKMK','RUN','MXP','KPI','XRR']			
-		this.board = [
-			[ 'A', 'P', 'K', 'M' ],
-			[ 'L', 'P', 'X', 'G' ],
-			[ 'E', 'R', 'I', 'P' ],
-			[ 'Y', 'S', 'R', 'T' ] ]
-			this.check = []
-			this.position = []
-			this.result = []
+		this.dictio = words		
+		this.board = this.print_board()
+		this.check = []
+		this.position = []
+		this.result = []
 
 	}
 
@@ -28,21 +26,16 @@ class Boggle{
 	}
 
 	solve(){
-		// console.log(this.board.length,"panjang board")
+		console.log(this.board)
 		for(let i =0;i<this.board.length;i++){
 			for(let j=0;j<this.board.length;j++){
 				for(let k=0;k<this.dictio.length;k++){
 					if(this.board[i][j]===this.dictio[k][0]){
 						this.check = []
 						this.position.push([i,j])
-						
 						this.check.push(this.dictio[k][0])
 						this.check_Awal(this.dictio[k])
-						// console.log(this.board)
-						// console.log('row',this.position[0],'col',this.position[1],'word',this.dictio[k])
-						// console.log(this.check,"this chek")
-						console.log(this.dictio[k].length,"panjang dict",this.check.length,"chek panjang")
-						if(this.check.length === this.dictio[k].length){
+						if(this.check.length === this.dictio[k].length && this.result.indexOf(this.check)===-1){
 							this.result.push(this.check)
 						}
 						
@@ -148,5 +141,6 @@ class Boggle{
 
 
 let newGame = new Boggle(4)
-console.log(newGame.print_board())
+// console.log(newGame)
+// console.log(newGame.print_board())
 newGame.solve()
