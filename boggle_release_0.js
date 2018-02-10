@@ -88,5 +88,5 @@ var strInput = 'predefinedsentence'
 
 var boggle = new Boggle(4, strInput);
 // console.log(boggle.board);
-// boggle.log_board();
+boggle.log_board();
 boggle.log_board(boggle.shake())
