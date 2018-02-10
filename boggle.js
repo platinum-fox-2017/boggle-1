@@ -24,5 +24,9 @@ class Boggle{
 
 }
 
+var fs = require('fs')
+var dict_string = fs.readFileSync('dict.txt').toString()
+
+console.log(dict_string)
 var game = new Boggle()
-console.log(game.board(4))
+console.log(game.board(9))
