@@ -113,8 +113,9 @@ var fs = require('fs')
 var words = fs.readFileSync('kamusdata.txt')
   .toString()
   .split(",")
+const args = process.argv;
 
-var newBoggle = new Boggle(words,10);
+var newBoggle = new Boggle(words,args[2]);
 //console.log(newBoggle.board());
 //console.log(newBoggle.words);
 //console.log(newBoggle.words.length);
