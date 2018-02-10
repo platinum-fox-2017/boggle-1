@@ -3,12 +3,8 @@ const words = require('./data')
 class Boggle{
 	constructor(size){
 		this.size = size
-		this.dictio = ['PI']		
-		this.board = [
-			[ 'A', 'P', 'I', 'M' ],
-			[ 'L', 'P', 'X', 'G' ],
-			[ 'E', 'R', 'I', 'P' ],
-			[ 'Y', 'S', 'R', 'T' ] ]
+		this.dictio = words		
+		this.board = this.print_board()
 		this.check = []
 		this.position = []
 		this.result = []
@@ -49,7 +45,7 @@ class Boggle{
 				
 			}
 		}	
-		console.log(`${this.result.length} word(s) found:`)
+		// console.log(`${this.result.length} word(s) found:`)
 		let listWord =[]
 		for(let l=0;l<this.result.length;l++){
 			// console.log(`${l+1}. ${this.result[l].join('')}`)
@@ -60,10 +56,13 @@ class Boggle{
 		let sortWord =[]
 		for(let m=0;m<listWord.length;m++){
 			if(sortWord.indexOf(listWord[m])===-1){
-				sortWord.push(listWord[m])
+				sortWord.push(listWord[m])	
 			}
 		}
-		console.log(sortWord)
+		console.log(`${sortWord.length} word(s) found:`)
+		for(let n=0;n<sortWord.length;n++){
+			console.log(`${n+1}. ${sortWord[n]}`)
+		}
 	}
 
 	check_compass(row,col,value){
