@@ -1,18 +1,16 @@
 class Boogle{
-    constructor (){     
-        this.board = this.shake(4)
-        this.dict = ['DAY','JOIN','HEART','YEAR','MONTH']
+    constructor (length){  
+        this.board = this.shake(length)
+        this.dict = require('./data.js')
     }
 
     shake(length){
-        let sample = 'DMONAYHTEHRAARTJ'
-        let counter = 0
+        let alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         let board = []
         for (let i=0; i<length; i++){
             board.push([])
             for(let j=0; j<length; j++){
-                board[i].push(sample[counter])
-                counter++
+                board[i].push(alpha[Math.floor(Math.random()*alpha.length)])
             }
         }
         return board
@@ -28,14 +26,11 @@ class Boogle{
        return firstChars;
     }
 
-    checkVisibleMove(word, slicedWord, start, visited, result){
+    checkPossibleMove(word, slicedWord, start, visited, result){
         let path = [[-1, -1],[-1, 0],[-1, 1],[0, -1],[0, 1],[1, -1],[1, 0],[1, 1]]
         for(let i = 0; i<path.length; i++){
         let nextRow = start[0] + path[i][0]
         let nextCol = start[1] + path[i][1]
-
-        // console.log('visited : ',visited)
-        // console.log('next :',[nextRow, nextCol])
         
             if(nextRow>=0 && nextRow<this.board.length && nextCol>=0 && nextCol<this.board.length){
                 if(this.move([nextRow, nextCol], visited)){
@@ -47,7 +42,7 @@ class Boogle{
                             return result
                         }else{
                             visited.push(newStart)
-                            this.checkVisibleMove(word, newWord, newStart, visited, result)
+                            this.checkPossibleMove(word, newWord, newStart, visited, result)
                         }
                     }
                 }
@@ -73,7 +68,7 @@ class Boogle{
           if(start.length>0){
               let newWord = word.slice(1)
               for(let i = 0; i<start.length; i++){
-                  this.checkVisibleMove(word, newWord, start[i], [start[i]],result)
+                  this.checkPossibleMove(word, newWord, start[i], [start[i]],result)
               }
               
           }
@@ -83,10 +78,13 @@ class Boogle{
           console.log(result[i]);
       }
   }
-
-
 }
 
-let boogle = new Boogle()
-console.log(boogle.shake(4))
-boogle.solve()
+let length = process.argv[2]
+let boogle = new Boogle(length)
+if(length >=4){
+    console.log(boogle.board)
+    boogle.solve()
+}else{
+    console.log('board length must be at least 4')
+} 
