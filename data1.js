@@ -1,0 +1,3 @@
+var words = ["ABA","ABAD","ABADI","ABAH","ABAI","ABAL","ABANG","ABANGAN","ABDI","ABDIKASI","ABDOMEN","ABDOMINAL","ABDUKSI","ABDUKTOR","ABERASI","ABIOTIK","ABIS","ABJAD"];
+
+exports.words = words;
