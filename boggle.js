@@ -6,6 +6,8 @@ class Boggle {
         this._dictionary = new Dictionary()
         this._size = size || 4
         this._shake = this.shake()
+        this._availableLetter = this.availableLetters()
+        this._unavailableLetter = this.unavailableLetter()
         this._filter = this.filter()
     }
     // generate board based on letters from dictionary
@@ -20,6 +22,21 @@ class Boggle {
             }
         }
         return board
+    }
+    availableLetters (){
+        let letterInBoard = []
+        for (let i = 0; i < this._shake.length; i++){
+            for (let j = 0; j < this._shake[i].length; j++){
+                if (letterInBoard.indexOf(this._shake[i][j]) == -1){
+                    letterInBoard.push(this._shake[i][j])
+                }
+            }
+        }
+        return letterInBoard.sort()
+    } 
+    unavailableLetter (){
+        let alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','-']
+        return alphabet.filter(x => !this._availableLetter.includes(x))
     }
     // reduce amount of word in dictionary by matching first letter of each word to board letters
     filter (){
@@ -37,8 +54,13 @@ class Boggle {
                 }
             }
             count++
+        }        
+        // filters words by any letter that is not in board
+        for(let i = 0; i < this._unavailableLetter.length; i++){
+            words = words.filter(a => !a.includes(this._unavailableLetter[i]))
         }
-        return words
+        // filters any word with length greater than the board size itself
+        return words.filter(x => x.length <= 16)    
     }
 
     checkAdjacent (pos, word, wordLength, letterIndex){
