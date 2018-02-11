@@ -21,29 +21,53 @@ class Boggle {
     this.dictionary = ['aikido','shale','shies','leaks','dial','easy','heal','kale','laid','said','seal','slay','aid','kid','ale','sky','she','lay']
     this.occupied = []
     this.visited = []
+    this.backtrack = false
   }
 
-  cardinal_search(new_board_coords){ // {row: rows, collumn: col};
-    let rows = new_board_coords.row
-    let cols = new_board_coords.collumn
+  cardinal_search(new_board_coords, cardinal,s){ // {row: rows, collumn: col};
+
+    let test_coords = new_board_coords
+    test_coords.row += cardinal.coords[0]
+    test_coords.collumn += cardinal.coords[1]
+    let rows = test_coords.row
+    let cols = test_coords.collumn
+    // if (this.backtrack === true) {
+    //   // this.occupied=this.occupied.slice(0, this.occupied.length)
+    //   console.log(this.occupied[this.occupied.length-1]);
+    // }
+
+    // if (cardinal.coords[0] === 1 && cardinal.coords[1] === 0) {console.log(this.occupied) }
+    // console.log(this.occupied.slice(5), s);
+
     if (this.board[rows] !== undefined) {
       if (this.board[rows][cols] !== undefined) {
-        for (let v = 0; v < this.occupied.length; v++) {
-          if (this.occupied[v] === new_board_coords){
+        // console.log(new_board_coords, 'input');
+        for (let v = 0; v < this.occupied.length-1; v++) {
+          // console.log(this.occupied[v], 'occupied');
+          if (this.occupied[v].row === test_coords.row && this.occupied[v].collumn === test_coords.collumn){
+            test_coords.row -= cardinal.coords[0]
+            test_coords.collumn -= cardinal.coords[1]
             return false
           }
         }
         for (let t = 0; t < this.visited.length; t++) {
-          if (this.visited[t] === new_board_coords){
+          if (this.visited[t].row === new_board_coords.row && this.visited[t].collumn === new_board_coords.collumn){
+            // console.log('visited trigger');
+            test_coords.row -= cardinal.coords[0]
+            test_coords.collumn -= cardinal.coords[1]
             return false
           }
         }
         return true
 
       } else {
+        test_coords.row -= cardinal.coords[0]
+        test_coords.collumn -= cardinal.coords[1]
         return false
       }
     }
+    test_coords.row -= cardinal.coords[0]
+    test_coords.collumn -= cardinal.coords[1]
     return false
   }
 
@@ -109,53 +133,78 @@ class Boggle {
       this.visited.push(index)
       let board_row = index.row;
       let board_col = index.collumn;
-      console.log(this.occupied);
-      for (var s = 0; s < this.boardVol;) {
-        console.log(s);
-        // console.log(this.board[board_row][board_col]);
+      this.backtrack = false
+      for (var s = 0; s < this.boardVol && s >= 0;) {
+        // console.log(new_board_coords, s);
+        // console.log(old_board_coords, s);
+        if (this.wordConstruct.length < 16 && this.backtrack !== true) {
+          if (s !== 0) {
 
-
-        if (s !== 0) {
-          this.occupied.push(new_board_coords);
-          this.wordConstruct += this.board[new_board_coords.row][new_board_coords.collumn]
-        } else {
-          this.occupied.push(index)
-          this.wordConstruct += this.board[board_row][board_col]
+            this.occupied.push(new_board_coords);
+            this.wordConstruct += this.board[new_board_coords.row][new_board_coords.collumn]
+          } else {
+            this.occupied.push(index)
+            this.wordConstruct += this.board[board_row][board_col]
+          }
         }
 
         // cardinal_search
-        let fault = 0
-        for (let d=0; d < this.cardinal_pos.length; d++) {
-          // console.log(d);
+        let fault = 0;
+        if (s === 0){
           var new_board_coords = {row: index.row, collumn: index.collumn}
-          // {row: rows, collumn: col, mark: false};
-          // this.cardinal_pos[d].coords[0/1]
-          new_board_coords.row += this.cardinal_pos[d].coords[0]
-          new_board_coords.collumn += this.cardinal_pos[d].coords[1]
-          if (this.cardinal_search(new_board_coords)) {
-            // console.log('found?');
-            // can move
-            d=8
-            s++
+        } else {
+          var new_board_coords = {row: new_board_coords.row, collumn: new_board_coords.collumn}
+        }
+        // console.log(this.occupied, s)
+        for (let d=0; d < this.cardinal_pos.length; d++) {
+
+          let cardinal = this.cardinal_pos[d]
+          var old_board_coords = this.occupied[this.occupied.length-1]
+          if (this.backtrack === true) {
+            // console.log(s, 'search from old');
+            if (this.cardinal_search(old_board_coords, cardinal,s)) {
+              // console.log('move');
+              // can move
+              this.backtrack = false
+              d=8
+              s++
+            } else {
+              fault++
+            }
           } else {
-            // console.log('fault');
-            fault++
+            if (this.cardinal_search(new_board_coords, cardinal,s)) {
+              this.backtrack = false
+              d=8
+              s++
+            } else {
+              fault++
+            }
           }
         }
 
         if (fault >= 8) {
+          console.log(this.wordConstruct, s, fault);
+          console.log(this.occupied, this.visited);
           // if no path
-          this.visited = [];
+          this.backtrack = true
+          if (this.visited.length > 1){
+            this.visited = this.visited.slice(0,1);
+          }
+          this.wordConstruct = this.wordConstruct.substr(0, this.wordConstruct.length-1)
           let hasBeenVisited = this.occupied[this.occupied.length-1];
-          this.occupied.pop
+          // console.log(this.occupied);
+          this.occupied.pop()
           this.visited.push(hasBeenVisited)
           s--
+          fault = 0
         }
-
+        console.log(this.wordConstruct, s, fault);
+        console.log(this.occupied, this.visited);
       }
 
     }
-    console.log(this.wordConstruct, this.wordConstruct.length);
+
+    // console.log(this.wordConstruct, this.wordConstruct.length);
     return console.log(this.wordConfirm)
   }
 

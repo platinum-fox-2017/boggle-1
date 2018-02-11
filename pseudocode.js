@@ -65,6 +65,8 @@
                              upLeft    : [ -1, -1 ] }
 // set wordConstruct as a way to contain temporary letters
 // set wordConfirm as a way to store words that are confirmed by dictionary file
+// set occupied as to keep track which cell is being used
+// set travelled as to keep track which cell is not valid to move to
 
 
 // find_coords()
@@ -89,7 +91,7 @@
   // loop stepCounter from 0 to boardVol - 1
     // stepCounter ++
     // pick curent letter from current position to wordConstruct
-    // mark this.coordinates.mark as true, value is picked
+    // push current cell into this.occupied
 
     // combine wordConstruct, and check if valid from dictionary
       // if true then add to wordConfirm,
@@ -98,14 +100,17 @@
     // loop d from 0 to 8, no increment
       // let new_board_coords as board_coords coordinates
       // use cardinal_pos at [d] to modify new_board_coords
-      // check board value with cardinal_search(new_board_coords)
-        // if true move to next box
+      // check board value with cardinal_search(new_board_coords, cardinal)
+        // if true move to next cell
+          // set new_board_coords with cardinal modifier
           // d++ (this cardinal direction is used)
           // else (does not have value/ has true mark)
               // d++ (this direction is not valid)
-  // reaching here means no valid cardinal direction is valid
-  // go back 1 step
-  // unmark this board_coords
+    // reaching here means no valid cardinal direction is valid
+    // go back 1 step, s--
+    // remove last letter from wordConstruct
+    // add the last entry of this.occupied to this.travelled
+    // remove last entry of this.occupied
 
 
 ** recursion is to far reaching for me
@@ -114,7 +119,7 @@
 // recursion step(new_board_coords)
 *****************************************************
 
-// cardinal_search(new_board_coords)
+// cardinal_search(new_board_coords, cardinal)
 // all share same principles,
 // difference being coordinates.
 // direction :
@@ -133,7 +138,13 @@
 // usage : step will input directions from loop
 // return true/ false if the direction has value
 // and NOT marked
-// if board at coordinates !== undefined and mark !== true
+
+// set target cell as new_board_coords modified by cardinal coordinates
+// if target cell value !== undefined
+  // check if target cell is in occupied
+    // if yes return false
+  // check if target cell is in visited
+    // if yes return false
   // return true
 // else return false
 
