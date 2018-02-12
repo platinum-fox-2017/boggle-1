@@ -42,35 +42,29 @@ class Boggle {
         }
     }
 
+    // Solve all the answer
     solve() {
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
-                // console.log("Posisi yang sedang di cek: "+this.boardArr[i][j]+" - "+i+" - "+j);
                 for (let k = 0; k < library.length; k++) {
                     this.check_library(library[k], "", 1, i, j);
                 }
-                // console.log("Check Library: "+this.check_library("",1,i,j));
             }
         }
     }
 
+    // Check every box and combination of words using recursive function
     check_library(library, str, length, y, x) {
         if (str == library) {
             if (this.result_check(str)) {
                 this.result.push(library);
-                // console.log("finished: " + library);
             }
-            // return true;
         }
 
         if (!this.possible(y, x)) return false;
-        // console.log(this.boardMap);
         str += this.boardArr[y][x];
-        // console.log(library+ " - " + str);
 
         if (library.slice(0, length) == str) {
-            // console.log("Ini str: " + str);
-
             if (this.check_library(library,str, length + 1, y, x + 1)) return true;
             if (this.check_library(library,str, length + 1, y, x - 1)) return true;
             if (this.check_library(library,str, length + 1, y + 1, x)) return true;
@@ -86,6 +80,7 @@ class Boggle {
 
     }
 
+    // Check does the answer already on the result array or not
     result_check(str) {
         for (let i = 0; i < this.result.length; i++) {
             if (this.result[i] == str)
@@ -94,6 +89,7 @@ class Boggle {
         return true;
     }
 
+    // Check is it possible to check the index x and y (must be inside the box)
     possible(y, x) {
         if (y >= 0 && x >= 0 && y < this.size && x < this.size) {
             if (this.boardMap[y][x] == 1) {
@@ -106,10 +102,12 @@ class Boggle {
 
 
 }
-
-
-var boggle = new Boggle(4);
+// Release 0: Using example box
+// var boggle = new Boggle();
 // boggle.create_example_box();
+
+// Release 2: Using data library and customize box size
+var boggle = new Boggle(4);
 boggle.shake();
 console.log(boggle.boardArr);
 boggle.solve();
