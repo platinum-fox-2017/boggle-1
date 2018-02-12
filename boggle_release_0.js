@@ -82,6 +82,10 @@ class Boggle {
     return boardShaken
   }
 
+  check_board(){
+
+  }
+
 }
 
 var strInput = 'predefinedsentence'
