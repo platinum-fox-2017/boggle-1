@@ -1,4 +1,4 @@
-const library = require('./data1').words;
+const library = require('./data').words;
 
 class Boggle {
     constructor(n = 4) {
@@ -6,16 +6,15 @@ class Boggle {
         this.size = n;
         this.boardMap = new Array();
         this.result = new Array();
-        this.result = new Array();
         this.map_board_init();
         // this.shake();
     }
 
     // Scramble the box character
     shake() {
-        for (let i = 0; i < number; i++) {
+        for (let i = 0; i < this.size; i++) {
             let tempArr = new Array();
-            for (let j = 0; j < number; j++) {
+            for (let j = 0; j < this.size; j++) {
                 tempArr.push(String.fromCharCode('A'.charCodeAt() + Math.floor(Math.random() * 26)));
             }
             this.boardArr.push(tempArr);
@@ -46,7 +45,7 @@ class Boggle {
     solve() {
         for (let i = 0; i < this.size; i++) {
             for (let j = 0; j < this.size; j++) {
-                console.log("Posisi yang sedang di cek: "+this.boardArr[i][j]+" - "+i+" - "+j);
+                // console.log("Posisi yang sedang di cek: "+this.boardArr[i][j]+" - "+i+" - "+j);
                 for (let k = 0; k < library.length; k++) {
                     this.check_library(library[k], "", 1, i, j);
                 }
@@ -59,18 +58,18 @@ class Boggle {
         if (str == library) {
             if (this.result_check(str)) {
                 this.result.push(library);
-                console.log("finished: " + library);
+                // console.log("finished: " + library);
             }
             // return true;
         }
 
         if (!this.possible(y, x)) return false;
-        console.log(this.boardMap);
+        // console.log(this.boardMap);
         str += this.boardArr[y][x];
-        console.log(library+ " - " + str);
+        // console.log(library+ " - " + str);
 
         if (library.slice(0, length) == str) {
-            console.log("Ini str: " + str);
+            // console.log("Ini str: " + str);
 
             if (this.check_library(library,str, length + 1, y, x + 1)) return true;
             if (this.check_library(library,str, length + 1, y, x - 1)) return true;
@@ -109,8 +108,9 @@ class Boggle {
 }
 
 
-var boggle = new Boggle();
-boggle.create_example_box();
+var boggle = new Boggle(4);
+// boggle.create_example_box();
+boggle.shake();
 console.log(boggle.boardArr);
 boggle.solve();
 console.log(boggle.result);
