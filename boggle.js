@@ -3,7 +3,7 @@
 2. lakukan looping di board dan di data.js untuk menyamakan huruf awal pada board dengan kata di data.js
 3. jika di temukan dilakukan validasi kata awal tersebut
 4. jika di board terdapat huruf selanjutnya dari data.js(ex:'apel') maka akan mereturn huruf selanjutnya(awalnya masuk huruf 'a' dillanjutkan 'p')
-5. jika yang di boardnya cmn ada kata('ape') dan di data.jsnya tidak sesuai ('apel') maka tidak akan dipush ke result 
+5. jika yang di boardnya cmn ada kata('ape') dan di data.jsnya tidak sesuai ('apel') maka tidak akan dipush ke result
 */
 
 const data = require('./data');
@@ -16,6 +16,7 @@ class Boogle{
     this.coordinate = []
     this.result = []
     this.board = []
+    this.length = []
   }
 
   print_board(){
@@ -42,10 +43,14 @@ class Boogle{
               this.result.push(this.find)
             }
           }
-          if(this.result.length === 5){
-            break;
-          }
           this.coordinate = []
+        }
+      }
+    }
+    for(let l = 0 ; l < this.result.length ; l++){
+      for(let m = 0 ; m < this.result.length ; m++){
+        if(this.result[l].join('') === this.result[m].join('')){
+          this.result.splice(m,1)
         }
       }
     }
@@ -66,47 +71,47 @@ class Boogle{
   check_area(row,col,letter){
     for(let i = 0 ; i <= 8 ; i++){
         //up
-        if(i === 0 && row !== 0 && this.check_word(row-1,col)){
+        if(i === 0 && row !== 0 && this.check_noturn_back(row-1,col)){
           if(this.board[row-1][col] === letter){
             this.coordinate.push([row-1,col])
             return true
           }
         }
         //up-right
-        if(i === 1 && row !== 0 && col !== this.board.length-1 && this.check_word(row-1,col+1)){
+        if(i === 1 && row !== 0 && col !== this.square-1 && this.check_noturn_back(row-1,col+1)){
           if(this.board[row-1][col+1] === letter){
             this.coordinate.push([row-1,col+1])
           }
         }
         //right
-        if(i === 2 && col !== this.board.length-1 && this.check_word(row,col+1)){
+        if(i === 2 && col !== this.square-1 && this.check_noturn_back(row,col+1)){
           if(this.board[row][col+1] === letter){
             this.coordinate.push([row,col+1])
             return true
           }
         }
         //down-right
-        if(i === 3 && row !== this.board.length-1 && col !== this.board.length -1 && this.check_word(row+1,col+1)){
+        if(i === 3 && row !== this.square-1 && col !== this.square -1 && this.check_noturn_back(row+1,col+1)){
           if(this.board[row+1][col+1] === letter){
             this.coordinate.push([row+1,col+1])
           }
         }
         //down
-        if(i === 4 && row !== this.board.length-1 && this.check_word(row+1,col)){
+        if(i === 4 && row !== this.square-1 && this.check_noturn_back(row+1,col)){
           if(this.board[row+1][col] === letter){
             this.coordinate.push([row+1,col])
             return true
           }
         }
         //left-down
-        if(i === 5 && row !== this.board.length-1 && col !== this.board.length-1 && this.check_word(row+1,col-1)){
+        if(i === 5 && row !== this.square-1 && col !== this.square-1 && this.check_noturn_back(row+1,col-1)){
           if(this.board[row+1][col-1] === letter){
             this.coordinate.push([row+1,col-1])
             return true
           }
         }
         //left
-        if(i === 6 && row !== this.board.length-1 && this.check_word(row,col-1)){
+        if(i === 6 && row !== this.square-1 && this.check_noturn_back(row,col-1)){
           if(this.board[row][col-1] === letter){
             this.coordinate.push([row,col-1])
             return true
@@ -114,7 +119,7 @@ class Boogle{
           }
         }
         //left-up
-        if(i === 7 && row !== 0 && col !== 0 && this.check_word(row-1,col-1)){
+        if(i === 7 && row !== 0 && col !== 0 && this.check_noturn_back(row-1,col-1)){
           if(this.board[row-1][col-1] == letter){
           this.coordinate.push([row-1,col-1])
           return true
@@ -127,7 +132,7 @@ class Boogle{
     }
   }
 
-  check_word(row,col){
+  check_noturn_back(row,col){
     for(let i = 0 ; i <= this.coordinate.length ; i++){
       if(i === this.coordinate.length){
         return true
@@ -141,7 +146,6 @@ class Boogle{
 
 }
 
-let game = new Boogle(4)
+let game = new Boogle(6)
 console.log(game.print_board())
-
 game.solve()
